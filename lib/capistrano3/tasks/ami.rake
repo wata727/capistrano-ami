@@ -8,7 +8,11 @@ namespace :ami do
   task :delete_old_releases do
     p "Delete old releases...."
     Capistrano3::Ami.fetch_old_releases(fetch(:ami_keep_releases, 5)) do |ami|
-      ami.delete!
+      ami.deregister
+      ami[:block_device_mapping].each do |device|
+        @ec2.delete_snapshot(snapshot_id: device[:ebs][:snapshot_id])
+      end
+      p "Deleted AMI: #{ami.id}"
     end
     p "Deleted AMIs"
   end
