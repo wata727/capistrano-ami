@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano3/ami/version'
+require 'capistrano/ami/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "capistrano3-ami"
-  spec.version       = Capistrano3::Ami::VERSION
+  spec.name          = "capistrano-ami"
+  spec.version       = Capistrano::Ami::VERSION
   spec.authors       = ["wata727"]
   spec.email         = ["watassbass@gmail.com"]
 
