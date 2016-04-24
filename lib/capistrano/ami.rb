@@ -1,10 +1,12 @@
 require "capistrano/ami/version"
 
 module Capistrano
-  class Ami
+  module Ami
+    include Capistrano::Ami::Instance
+
     def self.create(base_name)
-      image = @ec2.create_image(name: base_name, no_reboot: true, description: 'created by capistrano-ami')
-      image.create_tags(tags: [{key: 'created_by', value: 'capistrano3-ami'}])
+      image = deployed_instance.create_image(name: base_name, no_reboot: true, description: 'created by capistrano-ami')
+      image.create_tags(tags: [{key: 'created_by', value: 'capistrano-ami'}])
       image
     end
 
