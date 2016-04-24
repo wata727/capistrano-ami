@@ -1,3 +1,7 @@
+require "aws-sdk"
+require "capistrano/dsl"
+require "capistrano/ami/credentials"
+require "capistrano/ami/instance"
 require "capistrano/ami/version"
 
 module Capistrano
