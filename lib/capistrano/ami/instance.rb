@@ -1,15 +1,10 @@
 module Capistrano
   module Ami
     module Instance
-      include Capistrano::Ami::Credentials
-
-      def ec2
-        @ec2 = ::Aws::EC2::Client.new(credentials)
-      end
-
-      def deployed_instance
-        instance_id = capture "curl -s https://169.254.169.254/latest/meta-data/instance-id"
-        ec2.describe_instances(instance_id: instance_id)
+      def instance(instance_id, credentials)
+        client = ::Aws::EC2::Client.new(credentials)
+        ec2 = ::Aws::EC2::Resource.new(client: client)
+        ec2.instances(instance_ids: [instance_id]).first
       end
     end
   end

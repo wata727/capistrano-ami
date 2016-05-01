@@ -1,15 +1,15 @@
 require "aws-sdk"
-require "capistrano/dsl"
 require "capistrano/ami/credentials"
 require "capistrano/ami/instance"
 require "capistrano/ami/version"
 
 module Capistrano
   module Ami
+    include Capistrano::Ami::Credentials
     include Capistrano::Ami::Instance
 
-    def self.create(base_name)
-      image = deployed_instance.create_image(name: base_name, no_reboot: true, description: 'created by capistrano-ami')
+    def self.create(instance_id, base_name)
+      image = instance(instance_id, credentials).create_image(name: base_name, no_reboot: true, description: 'created by capistrano-ami')
       image.create_tags(tags: [{key: 'created_by', value: 'capistrano-ami'}])
       image
     end
@@ -20,7 +20,8 @@ module Capistrano
       images[keep_releases, images.length]
     end
 
-    module_function :deployed_instance
+    module_function :instance
+    module_function :credentials
   end
 end
 
