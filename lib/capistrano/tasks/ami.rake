@@ -9,15 +9,17 @@ namespace :ami do
   end
 
   task :delete_old_releases do
-    p "Delete old releases...."
-    Capistrano::Ami.fetch_old_releases(fetch(:ami_keep_releases, 5)) do |ami|
-      ami.deregister
-      ami[:block_device_mapping].each do |device|
-        @ec2.delete_snapshot(snapshot_id: device[:ebs][:snapshot_id])
+    on roles(:all) do |h|
+      info "Delete old releases...."
+      Capistrano::Ami.fetch_old_releases(fetch(:ami_keep_releases, 5)).each do |ami|
+        ami.deregister
+        ami.block_device_mappings.each do |device|
+          Capistrano::Ami.delete_snapshot(snapshot_id: device[:ebs][:snapshot_id])
+        end
+        info "Deleted AMI: #{ami.id}"
       end
-      p "Deleted AMI: #{ami.id}"
+      info "Deleted AMIs"
     end
-    p "Deleted AMIs"
   end
 end
 
