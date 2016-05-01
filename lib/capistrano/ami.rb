@@ -19,6 +19,8 @@ module Capistrano
       images.sort! { |a,b| b[:creation_date] <=> a[:creation_date] }
       images[keep_releases, images.length]
     end
+
+    module_function :deployed_instance
   end
 end
 
