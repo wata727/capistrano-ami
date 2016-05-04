@@ -4,7 +4,10 @@ module Capistrano
       include Capistrano::Ami::Credentials
 
       def client
-        @client ||= ::Aws::EC2::Client.new(credentials)
+        @client ||= ::Aws::EC2::Client.new(
+          region: fetch(:aws_region, ENV['AWS_REGION']),
+          credentials: credentials(fetch(:aws_credentials_profile_name))
+        )
       end
 
       def ec2

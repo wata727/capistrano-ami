@@ -1,12 +1,12 @@
 module Capistrano
   module Ami
     module Credentials
-      def credentials
-        credentials = {
-          region: fetch(:aws_region, ENV['AWS_REGION']),
-          access_key_id: fetch(:aws_access_key_id, ENV['AWS_ACCESS_KEY_ID']),
-          secret_access_key: fetch(:aws_secret_access_key, ENV['AWS_SECRET_ACCESS_KEY'])
-        }
+      def credentials(profile_name)
+        @credentials ||= ::Aws::SharedCredentials.new(profile_name: profile_name) if profile_name
+        @credentials ||= ::Aws::Credentials.new(
+          fetch(:aws_access_key_id, ENV['AWS_ACCESS_KEY_ID']),
+          fetch(:aws_secret_access_key, ENV['AWS_SECRET_ACCESS_KEY'])
+        )
       end
     end
   end
