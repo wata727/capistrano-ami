@@ -7,7 +7,8 @@ module Capistrano
         @client ||= ::Aws::EC2::Client.new(
           region: fetch(:aws_region, ENV['AWS_REGION']),
           credentials: credentials(fetch(:aws_credentials_profile_name))
-        )
+        ) if credentials(fetch(:aws_credentials_profile_name)).set?
+        @client ||= ::Aws::EC2::Client.new(region: fetch(:aws_region, ENV['AWS_REGION']))
       end
 
       def ec2
