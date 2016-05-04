@@ -12,7 +12,7 @@ namespace :ami do
     on roles(:all) do |h|
       instance_id = capture "curl -s http://169.254.169.254/latest/meta-data/instance-id"
       info "[capistrano-ami] [#{instance_id}] Deleting old AMIs...."
-      Capistrano::Ami.old_amis(instance_id, fetch(:keep_amis, 5)).each do |ami|
+      Array(Capistrano::Ami.old_amis(instance_id, fetch(:keep_amis, 5))).each do |ami|
         ami.deregister
         Capistrano::Ami.delete_snapshot(ami.block_device_mappings)
         info "[capistrano-ami] [#{instance_id}] Deleted AMI (#{ami.id})"
