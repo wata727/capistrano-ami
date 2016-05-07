@@ -76,6 +76,15 @@ set :aws_credentials_profile_name, 'profile_name'
 IAM role is most secure credential provider. If you can, should use this. [More infomation](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html).
 This provider used in no credentials configuration. Because you should not specify key values.
 
+## Versions
+
+We check working this plugin following platform versions.
+
+- Ruby 
+    - 2.3.0
+- Capistrano 
+    - 3.5.0
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/wata727/capistrano-ami. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
