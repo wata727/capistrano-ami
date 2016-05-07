@@ -4,6 +4,8 @@ describe Capistrano::Ami do
   before do
     # set region in all test
     set :aws_region, 'ap-northeast-1'
+    # use capistrano-ami module method
+    extend Capistrano::Ami::Instance
   end
 
   it 'has a version number' do
@@ -15,8 +17,6 @@ describe Capistrano::Ami do
       # init capistrano configuration
       delete :aws_access_key_id
       delete :aws_secret_access_key
-      # use capistrano-ami module method
-      extend Capistrano::Ami::Instance
     end
 
     it 'by config values' do
@@ -81,7 +81,30 @@ EOS
   end
 
   describe 'delete snapshot' do
-    it 'normally' do
+    it 'when has a snapshot' do
+      # get ami object
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      amis = Capistrano::Ami.old_amis('i-1234abcd', 1)
+      # webmock
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DeleteSnapshot/}).to_return status: 200, body: aws_api_response_mock('DeleteSnapshot.xml')
+
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1234abcd'})
+      Capistrano::Ami.delete_snapshot(amis.first.block_device_mappings)
+    end
+
+    it 'when has many snapshots' do
+      # get ami object
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      amis = Capistrano::Ami.old_amis('i-1234abcd', 0)
+      # webmock
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DeleteSnapshot/}).to_return status: 200, body: aws_api_response_mock('DeleteSnapshot.xml')
+
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1234abcd'})
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1a2b3c4d'})
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-a1b2c3d4'})
+      amis.each do |ami|
+        Capistrano::Ami.delete_snapshot(ami.block_device_mappings)
+      end
     end
   end
 end

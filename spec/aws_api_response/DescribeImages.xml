@@ -27,6 +27,19 @@
       </rootDeviceType>
       <rootDeviceName>/dev/xvda</rootDeviceName>
       <blockDeviceMapping>
+        <item>
+          <virtualName></virtualName>
+          <deviceName>/dev/xvda</deviceName>
+          <ebs>
+            <snapshotId>snap-1234abcd</snapshotId>
+            <volumeSize>8</volumeSize>
+            <deleteOnTermination>true</deleteOnTermination>
+            <volumeType>gp2</volumeType>
+            <iops>24</iops>
+            <encrypted>false</encrypted>
+          </ebs>
+          <noDevice></noDevice>
+        </item>
       </blockDeviceMapping>
       <virtualizationType>
       </virtualizationType>
@@ -70,6 +83,32 @@
       </rootDeviceType>
       <rootDeviceName>/dev/xvda</rootDeviceName>
       <blockDeviceMapping>
+        <item>
+          <virtualName></virtualName>
+          <deviceName>/dev/xvda</deviceName>
+          <ebs>
+            <snapshotId>snap-1a2b3c4d</snapshotId>
+            <volumeSize>8</volumeSize>
+            <deleteOnTermination>true</deleteOnTermination>
+            <volumeType>gp2</volumeType>
+            <iops>24</iops>
+            <encrypted>false</encrypted>
+          </ebs>
+          <noDevice></noDevice>
+        </item>
+        <item>
+          <virtualName></virtualName>
+          <deviceName>/dev/xvab</deviceName>
+          <ebs>
+            <snapshotId>snap-a1b2c3d4</snapshotId>
+            <volumeSize>8</volumeSize>
+            <deleteOnTermination>true</deleteOnTermination>
+            <volumeType>gp2</volumeType>
+            <iops>24</iops>
+            <encrypted>false</encrypted>
+          </ebs>
+          <noDevice></noDevice>
+        </item>
       </blockDeviceMapping>
       <virtualizationType>
       </virtualizationType>
