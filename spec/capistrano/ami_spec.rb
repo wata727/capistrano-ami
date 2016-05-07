@@ -40,7 +40,8 @@ aws_access_key_id = ABCDEFGHIJ0123456789
 aws_secret_access_key = abcdefghij0123456789ABCDEFGHIJ0123456789
 EOS
       allow(File).to receive(:read).with(File.join(Dir.home, '.aws', 'credentials')).and_return(sharedcredentials)
-      expect(credentials('test_credentials').set?).to be true
+      expect(credentials('test_credentials')).to be_an_instance_of(Aws::SharedCredentials)
+      expect(credentials('test_credentials').inspect).to include 'test_credentials'
     end
 
     it 'by IAM role' do
