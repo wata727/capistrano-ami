@@ -1,0 +1,5 @@
+UncommunicativeVariableName:
+  enabled: true
+  accept:
+  - a
+  - b
