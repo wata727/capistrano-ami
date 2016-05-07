@@ -50,10 +50,10 @@ EOS
   describe 'create AMI' do
     it 'normally' do
       # webmock
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeInstances/}).to_return status: 200, body: aws_api_response_mock('DescribeInstances.xml')
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateImage/}).to_return status: 200, body: aws_api_response_mock('CreateImage.xml')
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateTags/}).to_return status: 200, body: aws_api_response_mock('CreateTags.xml')
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      api_mock('DescribeInstances')
+      api_mock('CreateImage')
+      api_mock('CreateTags')
+      api_mock('DescribeImages')
 
       ami = Capistrano::Ami.create('i-1234abcd', 'capistrano-ami')
       expect(ami.id).to eq 'ami-1234abcd'
@@ -64,7 +64,7 @@ EOS
   describe 'fetch old AMIs' do
     it 'when has more than keep_amis' do
       # webmock
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      api_mock('DescribeImages')
 
       amis = Capistrano::Ami.old_amis('i-1234abcd', 1)
       expect(amis.size).to eq 1
@@ -73,7 +73,7 @@ EOS
 
     it 'when has less than keep_amis' do
       # webmock
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      api_mock('DescribeImages')
 
       amis = Capistrano::Ami.old_amis('i-1234abcd', 3)
       expect(amis.size).to eq 0
@@ -83,10 +83,10 @@ EOS
   describe 'delete snapshot' do
     it 'when has a snapshot' do
       # get ami object
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      api_mock('DescribeImages')
       amis = Capistrano::Ami.old_amis('i-1234abcd', 1)
       # webmock
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DeleteSnapshot/}).to_return status: 200, body: aws_api_response_mock('DeleteSnapshot.xml')
+      api_mock('DeleteSnapshot')
 
       expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1234abcd'})
       Capistrano::Ami.delete_snapshot(amis.first.block_device_mappings)
@@ -94,10 +94,10 @@ EOS
 
     it 'when has many snapshots' do
       # get ami object
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+      api_mock('DescribeImages')
       amis = Capistrano::Ami.old_amis('i-1234abcd', 0)
       # webmock
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DeleteSnapshot/}).to_return status: 200, body: aws_api_response_mock('DeleteSnapshot.xml')
+      api_mock('DeleteSnapshot')
 
       expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1234abcd'})
       expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1a2b3c4d'})
