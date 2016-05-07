@@ -47,14 +47,15 @@ EOS
   describe 'CreateAMI' do
     it 'create new AMI' do
       set :aws_region, 'ap-northeast-1'
-
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeInstances/}).to_return status: 200, body: File.read(File.join(File.expand_path('../..', __FILE__), 'aws_api_response', 'DescribeInstances.xml'))
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateImage/}).to_return status: 200, body: File.read(File.join(File.expand_path('../..', __FILE__), 'aws_api_response', 'CreateImage.xml'))
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateTags/}).to_return status: 200, body: File.read(File.join(File.expand_path('../..', __FILE__), 'aws_api_response', 'CreateTags.xml'))
-      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: File.read(File.join(File.expand_path('../..', __FILE__), 'aws_api_response', 'DescribeImages.xml'))
+      # webmock
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeInstances/}).to_return status: 200, body: aws_api_response_mock('DescribeInstances.xml')
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateImage/}).to_return status: 200, body: aws_api_response_mock('CreateImage.xml')
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateTags/}).to_return status: 200, body: aws_api_response_mock('CreateTags.xml')
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
 
       ami = Capistrano::Ami.create('i-1234abcd', 'capistrano-ami')
       expect(ami.id).to eq 'ami-1234abcd'
+      expect(ami.tags.map { |tag| [tag.key, tag.value] }).to match_array([['created_by', 'capistrano-ami'], ['base_instance_id', 'i-1234abcd']])
     end
   end
 
