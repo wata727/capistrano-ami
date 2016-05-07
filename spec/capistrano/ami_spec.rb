@@ -1,6 +1,11 @@
 require 'spec_helper'
 
 describe Capistrano::Ami do
+  before do
+    # set region in all test
+    set :aws_region, 'ap-northeast-1'
+  end
+
   it 'has a version number' do
     expect(Capistrano::Ami::VERSION).not_to be nil
   end
@@ -8,7 +13,6 @@ describe Capistrano::Ami do
   describe 'credentials' do
     before do
       # init capistrano configuration
-      delete :aws_region
       delete :aws_access_key_id
       delete :aws_secret_access_key
       # use capistrano-ami module method
@@ -38,7 +42,6 @@ EOS
     end
 
     it 'by IAM role' do
-      set :aws_region, 'ap-northeast-1'
       # TODO: require test that client is authorized
       expect(credentials(nil).set?).to be false
     end
@@ -46,7 +49,6 @@ EOS
 
   describe 'CreateAMI' do
     it 'create new AMI' do
-      set :aws_region, 'ap-northeast-1'
       # webmock
       stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeInstances/}).to_return status: 200, body: aws_api_response_mock('DescribeInstances.xml')
       stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateImage/}).to_return status: 200, body: aws_api_response_mock('CreateImage.xml')
