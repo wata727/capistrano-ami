@@ -14,7 +14,7 @@ module Capistrano
       def ec2_resource
         @ec2_resource ||= ::Aws::EC2::Resource.new(client: client)
       end
-      
+
       def instance(instance_id)
         @instance ||= ec2_resource.instances(instance_ids: [instance_id]).first
       end

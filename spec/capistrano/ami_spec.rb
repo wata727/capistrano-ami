@@ -68,7 +68,7 @@ EOS
 
       amis = Capistrano::Ami.old_amis('i-1234abcd', 1)
       expect(amis.size).to eq 1
-      expect(amis.map { |ami| ami.id }).to match_array(['ami-1234abcd'])
+      expect(amis.map(&:id)).to match_array(['ami-1234abcd'])
     end
 
     it 'when has less than keep_amis' do
@@ -88,7 +88,7 @@ EOS
       # webmock
       api_mock('DeleteSnapshot')
 
-      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1234abcd'})
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({ snapshot_id: 'snap-1234abcd' })
       Capistrano::Ami.delete_snapshot(amis.first.block_device_mappings)
     end
 
@@ -99,9 +99,9 @@ EOS
       # webmock
       api_mock('DeleteSnapshot')
 
-      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1234abcd'})
-      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-1a2b3c4d'})
-      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({snapshot_id: 'snap-a1b2c3d4'})
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({ snapshot_id: 'snap-1234abcd' })
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({ snapshot_id: 'snap-1a2b3c4d' })
+      expect_any_instance_of(Aws::EC2::Client).to receive(:delete_snapshot).with({ snapshot_id: 'snap-a1b2c3d4' })
       amis.each do |ami|
         Capistrano::Ami.delete_snapshot(ami.block_device_mappings)
       end

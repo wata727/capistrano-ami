@@ -1,7 +1,7 @@
 namespace :ami do
   task :create do
     on roles(:all) do |h|
-      instance_id = capture "curl -s http://169.254.169.254/latest/meta-data/instance-id"
+      instance_id = capture 'curl -s http://169.254.169.254/latest/meta-data/instance-id'
       info "[capistrano-ami] [#{instance_id}] Createing AMI..."
       ami = Capistrano::Ami.create(instance_id, fetch(:base_ami_name, 'capistrano-ami'))
       info "[capistrano-ami] [#{instance_id}] Created AMI (#{ami.id})"
@@ -10,7 +10,7 @@ namespace :ami do
 
   task :delete_old_amis do
     on roles(:all) do |h|
-      instance_id = capture "curl -s http://169.254.169.254/latest/meta-data/instance-id"
+      instance_id = capture 'curl -s http://169.254.169.254/latest/meta-data/instance-id'
       info "[capistrano-ami] [#{instance_id}] Deleting old AMIs...."
       Capistrano::Ami.old_amis(instance_id, fetch(:keep_amis, 5)).each do |ami|
         ami.deregister
