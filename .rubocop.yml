@@ -1,0 +1,17 @@
+Style/FileName:
+  Enabled: true
+  Exclude:
+    - lib/capistrano-ami.rb
+
+Style/Documentation:
+  Enabled: false
+
+Style/MethodLength:
+  Enabled: true
+  Max: 15
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 120
+  Exclude:
+    - capistrano-ami.gemspec
