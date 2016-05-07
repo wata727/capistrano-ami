@@ -63,15 +63,20 @@ EOS
 
   describe 'fetch old AMIs' do
     it 'when has more than keep_amis' do
+      # webmock
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
+
+      amis = Capistrano::Ami.old_amis('i-1234abcd', 1)
+      expect(amis.size).to eq 1
+      expect(amis.map { |ami| ami.id }).to match_array(['ami-1234abcd'])
     end
 
     it 'when has less than keep_amis' do
-    end
+      # webmock
+      stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
 
-    it 'when has no AMIs' do
-    end
-
-    it 'when has other AMIs' do
+      amis = Capistrano::Ami.old_amis('i-1234abcd', 3)
+      expect(amis).to be nil
     end
   end
 
