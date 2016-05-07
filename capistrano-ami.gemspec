@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['wata727']
   spec.email         = ['watassbass@gmail.com']
 
-  spec.summary       = 'create AMI (Amazon Machine Image) after deployment by capistrano3'
-  spec.description   = "After deployed, create the instance's AMI and delete old AMI versions. If you spefied 'ami_keep_releases', it's keep number of AMIs."
+  spec.summary       = 'create AMI (Amazon Machine Image) and manage generations after deployment by capistrano3'
+  spec.description   = "After deployed, create the instance's AMI and delete old AMI versions. If you spefied 'keep_amis', it's keep number of AMIs."
   spec.homepage      = 'https://github.com/wata727/capistrano-ami'
   spec.license       = 'MIT'
 
