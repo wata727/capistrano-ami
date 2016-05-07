@@ -4,6 +4,8 @@ describe Capistrano::Ami do
   before do
     # set region in all test
     set :aws_region, 'ap-northeast-1'
+    set :aws_access_key_id, 'ABCDEFGHIJ0123456789'
+    set :aws_secret_access_key, 'abcdefghij0123456789ABCDEFGHIJ0123456789'
     # use capistrano-ami module method
     extend Capistrano::Ami::Instance
   end
