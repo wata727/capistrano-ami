@@ -47,8 +47,8 @@ EOS
     end
   end
 
-  describe 'CreateAMI' do
-    it 'create new AMI' do
+  describe 'create AMI' do
+    it 'normally' do
       # webmock
       stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeInstances/}).to_return status: 200, body: aws_api_response_mock('DescribeInstances.xml')
       stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=CreateImage/}).to_return status: 200, body: aws_api_response_mock('CreateImage.xml')
@@ -61,19 +61,22 @@ EOS
     end
   end
 
-  describe 'FetchOldAMIs' do
-    it 'fetch old AMIs when has more than keep_amis' do
+  describe 'fetch old AMIs' do
+    it 'when has more than keep_amis' do
     end
 
-    it 'fetch old AMIs when has less than keep_amis' do
+    it 'when has less than keep_amis' do
     end
 
-    it 'fetch old AMIs when has other tag AMIs' do
+    it 'when has no AMIs' do
+    end
+
+    it 'when has other AMIs' do
     end
   end
 
-  describe 'DeleteSnapshot' do
-    it 'delete snapshot' do
+  describe 'delete snapshot' do
+    it 'normally' do
     end
   end
 end
