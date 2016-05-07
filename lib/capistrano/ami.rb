@@ -19,7 +19,7 @@ module Capistrano
     def self.old_amis(instance_id, keep_amis)
       images = ec2.images(owners: ['self'], filters: [{name: 'tag:created_by', values: ['capistrano-ami']}, {name: 'tag:base_instance_id', values: [instance_id]}])
       images = images.sort { |a,b| b.creation_date <=> a.creation_date }
-      images[keep_amis, images.length]
+      Array(images[keep_amis, images.length])
     end
 
     def self.delete_snapshot(block_device_mappings)

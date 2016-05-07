@@ -76,7 +76,7 @@ EOS
       stub_request(:post, 'https://ec2.ap-northeast-1.amazonaws.com/').with({body: /Action=DescribeImages/}).to_return status: 200, body: aws_api_response_mock('DescribeImages.xml')
 
       amis = Capistrano::Ami.old_amis('i-1234abcd', 3)
-      expect(amis).to be nil
+      expect(amis.size).to eq 0
     end
   end
 
