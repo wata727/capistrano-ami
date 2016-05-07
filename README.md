@@ -2,6 +2,7 @@
 
 [![build status](https://circleci.com/gh/wata727/capistrano-ami.svg?style=shield&circle-token=490e040fc0a638ff54e85f9f0ac71c0330bcafa6)](https://circleci.com/gh/wata727/capistrano-ami)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE.txt)
+[![Gem Version](https://badge.fury.io/rb/capistrano-ami.svg)](https://rubygems.org/gems/capistrano-ami)
 
 This plugin that create AMI (Amazon Machine Image) and manage generations tasks into capistrano script. `capistrano-ami` tasks are able to run when deploy target servers exists in AWS (http://aws.amazon.com/).
 
