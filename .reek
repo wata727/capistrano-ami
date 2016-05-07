@@ -1,10 +1,10 @@
 IrresponsibleModule:
   enabled: false
-    exclude: []
+  exclude: []
 DuplicateMethodCall:
   enabled: true
-    exclude: []
-      max_calls: 2 # [sideci] ease 1 to 2
+  exclude: []
+  max_calls: 2
 UncommunicativeVariableName:
   enabled: true
   accept:
