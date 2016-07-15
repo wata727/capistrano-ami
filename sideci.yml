@@ -1,0 +1,5 @@
+kanban:
+  exclude_paths:
+    - spec/**/*
+    - Rakefile
+    - bin/console
